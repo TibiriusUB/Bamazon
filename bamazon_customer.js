@@ -12,12 +12,11 @@ function start(callback) {
   runtime.read("SELECT * FROM products", "Now Building List", function (err, res) {
     if (err) return callback("Somthing went wrong!");
     callback(null, res)
-    runtime.END()
   })
 };
 
 function shop(prodcount, callback) {
-  function rangeCheck(val){
+  function rangeCheck(val) {
     if ((Number.isInteger(val)) && (val > 0) && (val <= prodcount)) {
       return true
     }
@@ -44,25 +43,52 @@ function shop(prodcount, callback) {
       //}
     }
   ];
-  
+
   inquirer.prompt(questions).then(answers => {
-    console.log(answers.purchase_id+" "+ answers.purchase_quan)
     var purchase = new BAMAZON
-    purchase.shop(answers.purchase_id, answers.purchase_quan,function(err,res){if (err) throw err})
+    purchase.shop(answers.purchase_id, answers.purchase_quan, function (err, res) {
+      if (err) throw err;
+      purchase.buy(res, function (err, res) {
+        if (err) throw err;
+        var table = new Table({ head: ["ID#", "Product", "Quantity", "Final Price"], colWidths: [10, 20] });
+        table.push([res[1][0].item_id, res[1][0].product_name, res[2], (res[2] * res[1][0].price)])
+        console.log(table.toString());
+        purchase.END(function(err,res){
+          if (err) throw err;
+          if (res) {
+            inquirer.prompt([
+              {
+              type: "confirm",
+              name: "again",
+              message:"would you like to make another purchase?"
+              }
+            ]).then(redo => {
+              if (redo.again){ startagain()}
+              console.log("Thank you for shopping with us! :)");
+             })
+          }
+        })
+      })
+    })
 
   });
 };
-// var newclient = new BAMAZON
-// var testr2 = "locating"
-// var testq2 = "SELECT * FROM products WHERE item_id = 5"
-// var testr = "searching"
-// var testq = "SELECT * FROM products"
-// newclient.read(testq,testr)
-// var newclient2 = new BAMAZON
-// newclient2.read(testq2,testr2)
-// this.read = function (aQuery,req) { "Active qUERY", and "REQuest" } should be all I need for now!
-// type: (String) Type of the prompt. Defaults: input - Possible values: input, confirm, list, rawlist, expand, checkbox, password, editor
-
+function startagain(){
+  start(function (err, res) {
+    if (err) return err;
+    var table = new Table({ head: ["ID#", "Product", "Price"], colWidths: [10, 20] });
+    for (tab = 0; tab < res.length; tab++) {
+      table.push([res[tab].item_id, res[tab].product_name, res[tab].price])
+    };
+    console.log(table.toString());
+  
+    shop(res.length, function (err, res2) {
+      if (err) return err;
+      console.log(res2)
+  
+    });
+  });
+}
 
 start(function (err, res) {
   if (err) return err;
@@ -71,9 +97,10 @@ start(function (err, res) {
     table.push([res[tab].item_id, res[tab].product_name, res[tab].price])
   };
   console.log(table.toString());
-  
+
   shop(res.length, function (err, res2) {
     if (err) return err;
-    
+    console.log(res2)
+
   });
 });

@@ -36,25 +36,20 @@ var BAMAZON = function () {
             if (res[0].stock_quantity < quan) {
                 return console.log("We are sorry, your order cannot be completed at this time.");
             };
-            callback(null, (res[0].stock_quantity - quan));
+            callback(null, [(res[0].stock_quantity - quan), res,quan]);
         })
     };
-    this.buy = function (id,prodsale) {
-    // this.callme()
-     var query = this.connection.query("UPDATE products SET stock_quantity = " + prodsale + " WHERE item_id = " + id, function (err, res) {
-         console.log("Items Purchased!");
-     }
-     )
+    this.buy = function (prodsale, callback) {
+        // this.callme()
+        var query = this.connection.query("UPDATE products SET stock_quantity = " + prodsale[0] + " WHERE item_id = " + prodsale[1][0].item_id, function (err, res) {
+            console.log("Items Purchased!");
+           callback(null, prodsale)
+        })
     }
-
-
-
-
-
-
-this.END = function () {
-    this.connection.end()
-};
+    this.END = function (callback) {
+        this.connection.end()
+        callback(null,true)
+    };
 };
 module.exports = BAMAZON;
 // var testr = "Now Building List"
