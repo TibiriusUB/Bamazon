@@ -3,7 +3,8 @@ require('dotenv').config();
 
 var BAMAZON = function () {
 
-    this.connection = mysql.createConnection({
+    this.pool = mysql.createPool({
+        connectionLimit: 5,
         host: process.env.DB_host,
         port: process.env.DB_port,
         user: process.env.DB_user,
@@ -12,15 +13,19 @@ var BAMAZON = function () {
     });
 
     this.callme = function () {
-        this.connection.connect(function (err) {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
                 console.error('error connecting: ' + err.stack);
                 return;
-            }
-        });
+              }
+                console.log('connected as id ' + connection.threadId);
+                return connection;
+            });
+        }
+        
     };
     this.read = function (aQuery, req, callback) {
-        //this.callme();
+        this.callme();
         console.log(req + "\n");
         var query = this.connection.query(aQuery, function (err, res) {
             if (err) return callback(err);
@@ -29,32 +34,32 @@ var BAMAZON = function () {
 
     };
     this.shop = function (id, quan, callback) {
-        //this.callme();
+        this.callme();
         console.log(id + " take 2! " + quan)
         var query = this.connection.query("SELECT * FROM products WHERE item_id = " + id, function (err, res) {
             if (err) return callback(err);
+            callback(null, res)
             if (res[0].stock_quantity < quan) {
                 return console.log("We are sorry, your order cannot be completed at this time.");
-            };
-            callback(null, (res[0].stock_quantity - quan));
+            }
+            let prodsale = ((res[0].stock_quantity) - quan);
+            callback(id, prodsale);
         })
+
     };
-    this.buy = function (id,prodsale) {
-    // this.callme()
-     var query = this.connection.query("UPDATE products SET stock_quantity = " + prodsale + " WHERE item_id = " + id, function (err, res) {
-         console.log("Items Purchased!");
-     }
-     )
+
+    this.buy = function (id, prodsale) {
+        this.callme()
+        var query = this.connection.query("UPDATE products SET stock_quantity = " + prodsale + " WHERE item_id = " + id, function (err, res) {
+            if (err) return err;
+            console.log("Items Purchased!");
+        })
     }
 
+    this.END = function () {
+        this.connection.end()
 
-
-
-
-
-this.END = function () {
-    this.connection.end()
-};
+    }
 };
 module.exports = BAMAZON;
 // var testr = "Now Building List"

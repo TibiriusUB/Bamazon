@@ -1,0 +1,1 @@
+var table = require("cli-table3");
