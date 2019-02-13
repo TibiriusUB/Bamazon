@@ -1,9 +1,7 @@
 var BAMAZON = require("./BAMAZON.js");
-//var Tablesetteing = require("./Tablesetting.js")
 var Table = require("cli-table3");
 var inquirer = require("inquirer");
-var cycle = "0"
-var prodcount = 72
+
 
 //starts the program, prepares the product list, and sends back the listing amount
 function start(callback) {
@@ -15,6 +13,7 @@ function start(callback) {
   })
 };
 
+//inquirer questions to get user input
 function shop(prodcount, callback) {
   function rangeCheck(val) {
     if ((Number.isInteger(val)) && (val > 0) && (val <= prodcount)) {
@@ -43,7 +42,7 @@ function shop(prodcount, callback) {
       //}
     }
   ];
-
+//mire of callbacks, ugly but functional. researching ways to clean up the code.
   inquirer.prompt(questions).then(answers => {
     var purchase = new BAMAZON
     purchase.shop(answers.purchase_id, answers.purchase_quan, function (err, res) {
@@ -73,6 +72,8 @@ function shop(prodcount, callback) {
 
   });
 };
+
+//simple restart
 function startagain(){
   start(function (err, res) {
     if (err) return err;
@@ -89,7 +90,7 @@ function startagain(){
     });
   });
 }
-
+//AANNNND WE'RE OFF!
 start(function (err, res) {
   if (err) return err;
   var table = new Table({ head: ["ID#", "Product", "Price"], colWidths: [10, 20] });
@@ -97,7 +98,7 @@ start(function (err, res) {
     table.push([res[tab].item_id, res[tab].product_name, res[tab].price])
   };
   console.log(table.toString());
-
+//jumps to a different set questions. Initially, this was part of a modular design, hence the BAMAZON.js file containing the MySQL code.
   shop(res.length, function (err, res2) {
     if (err) return err;
     console.log(res2)
