@@ -9,6 +9,8 @@ function start(callback) {
   let runtime = new BAMAZON;
   runtime.read("SELECT * FROM products", "Now Building List", function (err, res) {
     if (err) return callback("Somthing went wrong!");
+    runtime.END(function (err, res) {
+      if (err) throw err})
     callback(null, res)
   })
 };
@@ -50,7 +52,7 @@ function shop(prodcount, callback) {
       purchase.buy(res, function (err, res) {
         if (err) throw err;
         var table = new Table({ head: ["ID#", "Product", "Quantity", "Final Price"], colWidths: [10, 20] });
-        table.push([res[1][0].item_id, res[1][0].product_name, res[2], (res[2] * res[1][0].price)])
+        table.push([res[1][0].item_id, res[1][0].product_name, res[2], ((res[2] * res[1][0].price).toFixed(2))])
         console.log(table.toString());
         purchase.END(function(err,res){
           if (err) throw err;
@@ -58,6 +60,7 @@ function shop(prodcount, callback) {
             inquirer.prompt([
               {
               type: "confirm",
+              
               name: "again",
               message:"would you like to make another purchase?"
               }
