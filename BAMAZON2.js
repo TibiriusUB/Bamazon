@@ -30,10 +30,10 @@ var BAMAZON = function () {
 
     };
     this.updateMe = function (aQuery, req, callback) {
+        Log(req)
         var query = this.connection.query(aQuery, function (err, res) {
             if (err) return callback(err);
-            if (res[0].stock_quantity < quan) {}
-            callback(null, [(res[0].stock_quantity - quan), res,quan]);
+            callback(null, res);
         })
     };
     this.deleteMe = function (aQuery, req, callback) {

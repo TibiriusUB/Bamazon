@@ -53,7 +53,7 @@ function shop(prodcount, callback) {
         if (err) throw err;
         var table = new Table({ head: ["ID#", "Product", "Quantity", "Final Price"], colWidths: [10, 20] });
         table.push([res[1][0].item_id, res[1][0].product_name, res[2], ((res[2] * res[1][0].price).toFixed(2))])
-        console.log(table.toString());
+        Log(table.toString());
         purchase.END(function(err,res){
           if (err) throw err;
           if (res) {

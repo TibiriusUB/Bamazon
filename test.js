@@ -45,7 +45,7 @@ var questions = [
       var valid = !isNaN(parseFloat(value));
       return valid || 'Please enter a number';
     },
-    filter: Number
+    filter: Number.isInteger()
   },
   {
     type: 'expand',
@@ -73,7 +73,7 @@ var questions = [
     type: 'rawlist',
     name: 'beverage',
     message: 'You also get a free 2L beverage',
-    choices: ['Pepsi', '7up', 'Coke']
+    choices: [{0:'Pepsi'}, {1:'7up'}, {2:'Coke'}]
   },
   {
     type: 'input',
