@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS bamazonDB;
-CREATE database banmazonDB;
+CREATE database bamazonDB;
 -- database scripting, and column justification
 USE bamazonDB;
 
@@ -32,3 +32,25 @@ CREATE TABLE departments (
   PRIMARY KEY (department_id)
 );
 
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('vitamins',10.00,'health_products',2500,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('kibble',15.00,'petcare',4000,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('gamestaion-x',499.99,'entertainment_electronic',500,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('fauxnopoly',24.99,'entertainment_physical',2500,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('pizzabytes',8.99,'food',3000,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('scribbleglue',4.99,'crafts',8000,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('harrys_classroom',19.99,'education_electronic',1500,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('chemestry_101',50.00,'education_physical',3000,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('monalisa_prints',32.98,'art',2000,0);
+INSERT INTO products (product_name,price,department_name,stock_quantity,product_sales) VALUES('tuba',300.00,'music',2500,0);
+
+
+INSERT INTO departments (department_name, over_head_costs) VALUES('health_products',2500);
+INSERT INTO departments (department_name, over_head_costs) VALUES('petcare',4000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('entertainment_electronic',5000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('entertainment_physical',4500);
+INSERT INTO departments (department_name, over_head_costs) VALUES('food',3000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('crafts',2000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('education_electronic',1500);
+INSERT INTO departments (department_name, over_head_costs) VALUES('education_physical',3000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('art',2000);
+INSERT INTO departments (department_name, over_head_costs) VALUES('music',2500);
